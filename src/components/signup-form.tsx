@@ -8,6 +8,7 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { FaGoogle } from 'react-icons/fa';
 
 export function SignupForm({
   className,
@@ -58,7 +59,7 @@ export function SignupForm({
                 fill="currentColor"
               />
             </svg>
-            Sign up with GitHub
+            Sign up with Google
           </Button>
           <FieldDescription className="px-6 text-center">
             Already have an account? <a href="#">Sign in</a>
