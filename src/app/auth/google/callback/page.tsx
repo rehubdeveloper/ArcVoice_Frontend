@@ -28,7 +28,7 @@ export default function GoogleCallbackPage() {
           return
         }
 
-        setStatus("Exchanging authorization code...")
+        setStatus("Authorizing Google account...")
 
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/api/accounts/google/`,
