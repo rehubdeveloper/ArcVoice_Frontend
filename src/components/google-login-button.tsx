@@ -13,7 +13,9 @@ export default function GoogleLoginButton({
       // existing client callback route under /auth/google/callback
       // (the app has src/app/auth/google/callback/page.tsx) — ensure this value is
       // registered in your Google Cloud Console "Authorized redirect URIs".
-      const redirectUri = process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI;
+      const redirectUri =
+        process.env.NEXT_PUBLIC_GOOGLE_REDIRECT_URI ||
+        process.env.NEXT_PUBLIC_API_URL + "/api/accounts/oauth2/callback";
 
       // Helpful debug info (only in dev) so you can quickly check what redirect
       // URI was used if Google reports redirect_uri_mismatch in their error.
