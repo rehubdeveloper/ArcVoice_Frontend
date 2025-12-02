@@ -16,41 +16,13 @@ export default function GoogleCallbackPage() {
     }
 
     // Send to backend
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}api/accounts/google/`, {
-      method: "POST",
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/accounts/oauth2/callback/?code=${code}`, {
+      method: "GET",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code }),
     })
-      .then(async (res) => {
-        const contentType = res.headers.get("content-type") || "";
-        let body: any = null;
-        try {
-          body = contentType.includes("application/json") ? await res.json() : await res.text();
-        } catch (err) {
-          body = null;
-        }
-
-        if (!res.ok) {
-          console.error("Callback exchange failed", { status: res.status, body });
-          return;
-        }
-
-        return body;
-      })
-      .then((data) => {
-        if (!data) return;
-
-        if (data.status === "error") {
-          console.error(data.message);
-          return;
-        }
-
-        // Save JWT
-        localStorage.setItem("access", data.data?.access);
-        localStorage.setItem("refresh", data.data?.refresh);
-
+      .then(() => {
         // Redirect to profile page to show sign-in success
-        router.push("/profile");
+        router.push("/");
       })
   }, [])
 
