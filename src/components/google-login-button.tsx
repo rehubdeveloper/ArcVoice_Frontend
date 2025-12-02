@@ -1,12 +1,15 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export default function GoogleLoginButton({
   mode,
 }: {
   mode: "login" | "signup";
 }) {
+
+  const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
   const handleGoogle = async () => {
     try {
       // Use an explicit environment config if present, otherwise fall back to the
@@ -25,7 +28,6 @@ export default function GoogleLoginButton({
       // The backend /api/accounts/google/ endpoint expects the `code` (not the
       // auth URL), which will be handled in the callback page.
 
-      const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
       if (!clientId) {
         console.error("Missing NEXT_PUBLIC_GOOGLE_CLIENT_ID environment variable");
         return;
@@ -43,6 +45,7 @@ export default function GoogleLoginButton({
 
       const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
       window.location.href = googleAuthUrl;
+
     } catch (error) {
       console.error("Google login failed:", error);
     }
@@ -64,3 +67,4 @@ export default function GoogleLoginButton({
     </Button>
   );
 }
+

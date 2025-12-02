@@ -1,30 +1,64 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 export default function GoogleCallbackPage() {
   const router = useRouter()
+  const [status, setStatus] = useState("Connecting your Google Account...")
 
   useEffect(() => {
-    const url = new URL(window.location.href)
-    const code = url.searchParams.get("code")
+    const run = async () => {
+      try {
+        const url = new URL(window.location.href)
 
-    if (!code) {
-      console.error("Missing code")
-      return
+        const error = url.searchParams.get("error")
+        const errorDesc = url.searchParams.get("error_description")
+        const code = url.searchParams.get("code")
+
+        if (error) {
+          console.error("Google OAuth error:", error, errorDesc)
+          setStatus("Google authentication failed. Please try again.")
+          return
+        }
+
+        if (!code) {
+          console.error("No code parameter found in redirect URL")
+          setStatus("Invalid callback. Missing authorization code.")
+          return
+        }
+
+        setStatus("Exchanging authorization code...")
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/accounts/google/`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              code: code
+            })
+          }
+        )
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => null)
+          console.error("Backend Google auth failed:", errData)
+          setStatus("Authentication failed on server. Try again.")
+          return
+        }
+
+        setStatus("Login successful. Redirecting...")
+
+        router.push("/")
+      } catch (err) {
+        console.error("Fatal callback handler error:", err)
+        setStatus("An unexpected error occurred. Try again shortly.")
+      }
     }
 
-    // Send to backend
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/accounts/oauth2/callback/?code=${code}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then(() => {
-        // Redirect to profile page to show sign-in success
-        router.push("/");
-      })
+    run()
   }, [])
 
-  return <p className="text-center p-4">Connecting your Google Account...</p>
+  return <p className="text-center p-4">{status}</p>
 }
