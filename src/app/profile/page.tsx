@@ -40,7 +40,6 @@ export default function ProfilePage() {
                 Signup successful — you can now sign in.
               </div>
             )}
-          <>
             <p className="mb-4">No active session detected.</p>
             <p className="mb-4">If you just signed up, please sign in. If you signed in and still see this, check the login flow.</p>
             <div className="flex gap-2">
