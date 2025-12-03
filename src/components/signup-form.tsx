@@ -10,54 +10,72 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import GoogleLoginButton from "./google-login-button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export function SignupForm({ className, ...props }: React.ComponentProps<"form">) {
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
   const router = useRouter();
 
   const handleSignup = async (e: any) => {
     e.preventDefault();
     setLoading(true);
+    setSuccessMessage("");
+    setFieldErrors({});
 
-    const full_name = e.target.name.value;
+    const username = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
-
+    console.log("SIGNUP DATA → ", { username, email, password });
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}api/accounts/register/`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/accounts/register/`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ full_name, email, password }),
+        body: JSON.stringify({ username, email, password }),
       }
     );
-
+    if (!res.ok) {
+      // Handle non-200 responses
+      const data = await res.json();
+      setFieldErrors({ general: data.email || "" });
+      setLoading(false);
+      return;
+    }
     const data = await res.json();
-    setLoading(false);
+    console.log("SIGNUP RESPONSE → ", data);
 
-    // If the API returns tokens, store them and redirect. Otherwise mark signup success
-    if (data?.status === "success" && data?.data?.access) {
-      try {
-        localStorage.setItem("access", data.data.access);
-        localStorage.setItem("refresh", data.data.refresh);
-      } catch (e) {
-        console.error("Failed to store tokens locally", e);
-      }
 
-      router.push("/profile");
+    setSuccessMessage("Account created successfully! Redirecting to login...");
+    setTimeout(() => {
+      router.push("/login");
+      setLoading(false);
+    }, 2000);
+
+
+    // Check for field-specific errors
+    const errors: { [key: string]: string } = {};
+    if (data.username && (Array.isArray(data.username) || typeof data.username === 'string')) {
+      errors.name = Array.isArray(data.username) ? data.username[0] : data.username;
+    }
+    if (data.email && (Array.isArray(data.email) || typeof data.email === 'string')) {
+      errors.email = Array.isArray(data.email) ? data.email[0] : data.email;
+    }
+    if (data.password && (Array.isArray(data.password) || typeof data.password === 'string')) {
+      errors.password = Array.isArray(data.password) ? data.password[0] : data.password;
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
       return;
     }
 
-    // Set a temporary flag so /profile can report signup success
-    try {
-      localStorage.setItem("signup_success", "true");
-    } catch (e) {}
-
-    console.log("SIGNUP RESPONSE → ", data);
-    router.push("/profile");
+    // Fallback for unexpected response
+    setFieldErrors({ general: "An unexpected error occurred. Please try again." });
   };
 
   return (
@@ -67,19 +85,46 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
           <h1 className="text-2xl font-bold">Create your account</h1>
         </div>
 
+        {successMessage && (
+          <div className="text-green-600 text-center font-medium">
+            {successMessage}
+          </div>
+        )}
+
+        {fieldErrors.general && (
+          <div className="text-red-600 text-center font-medium">
+            {fieldErrors.general}
+          </div>
+        )}
+
         <Field>
-          <FieldLabel htmlFor="name">Full Name</FieldLabel>
+          <FieldLabel htmlFor="name">Username</FieldLabel>
           <Input id="name" required />
+          {fieldErrors.name && (
+            <div className="text-red-600 text-sm mt-1">
+              {fieldErrors.name}
+            </div>
+          )}
         </Field>
 
         <Field>
           <FieldLabel htmlFor="email">Email</FieldLabel>
           <Input id="email" type="email" required />
+          {fieldErrors.email && (
+            <div className="text-red-600 text-sm mt-1">
+              {fieldErrors.email}
+            </div>
+          )}
         </Field>
 
         <Field>
           <FieldLabel htmlFor="password">Password</FieldLabel>
-          <Input id="password" type="password" required />
+          <PasswordInput id="password" required />
+          {fieldErrors.password && (
+            <div className="text-red-600 text-sm mt-1">
+              {fieldErrors.password}
+            </div>
+          )}
         </Field>
 
         <Field>

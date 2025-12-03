@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { FaGoogle } from "react-icons/fa";
 
 export default function GoogleLoginButton({
   mode,
@@ -53,16 +54,7 @@ export default function GoogleLoginButton({
 
   return (
     <Button variant="outline" type="button" onClick={handleGoogle}>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        className="mr-2 size-4"
-      >
-        <path
-          d="M12.48 10.92v3.28h7.84..."
-          fill="currentColor"
-        />
-      </svg>
+      <FaGoogle className="mr-2" />
       {mode === "login" ? "Login with Google" : "Sign up with Google"}
     </Button>
   );

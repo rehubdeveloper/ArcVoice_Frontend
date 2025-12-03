@@ -11,27 +11,30 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import GoogleLoginButton from "./google-login-button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export function LoginForm({ className, ...props }: React.ComponentProps<"div">) {
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
     setLoading(true);
+    setErrorMessage("");
 
-    const email = e.target.email.value;
+    const username = e.target.username.value;
     const password = e.target.password.value;
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}api/accounts/login/`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/accounts/login/`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
       }
     );
 
@@ -52,6 +55,8 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
       return;
     }
 
+    // Handle login failure
+    setErrorMessage("Invalid username or password. Please try again.");
     console.log("LOGIN RESPONSE → ", data);
   };
 
@@ -69,14 +74,20 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
               </div>
 
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input id="email" type="email" required />
+                <FieldLabel htmlFor="username">Username</FieldLabel>
+                <Input id="username" type="text" required />
               </Field>
 
               <Field>
                 <FieldLabel htmlFor="password">Password</FieldLabel>
-                <Input id="password" type="password" required />
+                <PasswordInput id="password" required />
               </Field>
+
+              {errorMessage && (
+                <div className="text-red-600 text-center font-medium">
+                  {errorMessage}
+                </div>
+              )}
 
               <Field>
                 <Button type="submit" disabled={loading}>
