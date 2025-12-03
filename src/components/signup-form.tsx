@@ -12,14 +12,24 @@ import {
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import GoogleLoginButton from "./google-login-button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export function SignupForm({ className, ...props }: React.ComponentProps<"form">) {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
+  const [resendCountdown, setResendCountdown] = useState(0);
   const router = useRouter();
+
+  useEffect(() => {
+    if (resendCountdown > 0) {
+      const timer = setTimeout(() => {
+        setResendCountdown(resendCountdown - 1)
+      }, 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [resendCountdown])
 
   const handleSignup = async (e: any) => {
     e.preventDefault();
@@ -42,40 +52,38 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
     if (!res.ok) {
       // Handle non-200 responses
       const data = await res.json();
-      setFieldErrors({ general: data.email || "" });
+      setFieldErrors({ general: data.email || data.username || "Signup failed" });
       setLoading(false);
       return;
     }
     const data = await res.json();
-    console.log("SIGNUP RESPONSE → ", data);
+    console.log("SIGNUP RESPONSE → ");
 
 
-    setSuccessMessage("Account created successfully! Redirecting to login...");
-    setTimeout(() => {
-      router.push("/login");
+    // Send OTP immediately after successful registration
+    const otpRes = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/accounts/auth/resend-otp/`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      }
+    );
+
+    const otpData = await otpRes.json();
+
+    if (!otpRes.ok || otpData.status !== "success") {
+      setFieldErrors({ general: otpData.message || "Failed to send OTP" });
       setLoading(false);
-    }, 2000);
-
-
-    // Check for field-specific errors
-    const errors: { [key: string]: string } = {};
-    if (data.username && (Array.isArray(data.username) || typeof data.username === 'string')) {
-      errors.name = Array.isArray(data.username) ? data.username[0] : data.username;
-    }
-    if (data.email && (Array.isArray(data.email) || typeof data.email === 'string')) {
-      errors.email = Array.isArray(data.email) ? data.email[0] : data.email;
-    }
-    if (data.password && (Array.isArray(data.password) || typeof data.password === 'string')) {
-      errors.password = Array.isArray(data.password) ? data.password[0] : data.password;
-    }
-
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
       return;
     }
 
-    // Fallback for unexpected response
-    setFieldErrors({ general: "An unexpected error occurred. Please try again." });
+    setSuccessMessage("OTP code has been sent to your mail! Redirecting...");
+    setResendCountdown(30); // Start countdown for resend restriction
+    setTimeout(() => {
+      router.push(`/otp?email=${encodeURIComponent(email)}`);
+      setLoading(false);
+    }, 2000);
   };
 
   return (

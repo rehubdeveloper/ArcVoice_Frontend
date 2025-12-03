@@ -28,7 +28,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 
     const username = e.target.username.value;
     const password = e.target.password.value;
-
+    console.log("SENDING LOGIN DATA → ");
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/accounts/login/`,
       {
@@ -43,6 +43,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
 
     // Successful login returns tokens in data.data.access & data.data.refresh
     if (data?.status === "success" && data?.data?.access) {
+      console.log("LOGIN SUCCESS ! ");
       try {
         localStorage.setItem("access", data.data.access);
         localStorage.setItem("refresh", data.data.refresh);
