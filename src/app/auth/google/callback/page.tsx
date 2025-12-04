@@ -55,8 +55,17 @@ export default function GoogleCallbackPage() {
           setStatusType("error")
           return
         }
+        const data = await response.json()
+
+        try {
+          localStorage.setItem("access", data.data.access);
+          localStorage.setItem("refresh", data.data.refresh);
+        } catch (e) {
+          console.error("Failed to store tokens locally", e);
+        }
 
         setStatus("Login successful. Redirecting...")
+
         setStatusType("success")
 
         setTimeout(() => {
