@@ -1,7 +1,5 @@
 "use client"
 
-import Navbar from "@/components/navbar"
-import Footer from "@/components/footer"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 
@@ -35,9 +33,6 @@ export default function UnderDevelopment() {
                     />
                 ))}
             </div>
-
-            <Navbar />
-
             {/* Main Content */}
             <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8 pt-20">
                 <div className="text-center max-w-2xl mx-auto">
@@ -150,7 +145,6 @@ export default function UnderDevelopment() {
                 </div>
             </div>
 
-            <Footer />
         </main>
     )
 }

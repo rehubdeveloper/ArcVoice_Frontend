@@ -166,7 +166,7 @@ export default function Footer() {
             {/* Contact info */}
             <div className="flex flex-col xs:flex-row items-start xs:items-center gap-4 xs:gap-6">
               <a
-                href="mailto:hello@arcvoice.com"
+                href="mailto:tech@rehubdevelopers.com"
                 className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition"
               >
                 <Mail className="w-4 h-4 flex-shrink-0" />
