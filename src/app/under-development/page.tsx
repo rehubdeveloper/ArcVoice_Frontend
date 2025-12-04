@@ -2,8 +2,58 @@
 
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 export default function UnderDevelopment() {
+    const [message, setMessage] = useState("")
+    const [error, setError] = useState("")
+    const router = useRouter()
+    const [notifyLoading, setNotifyLoading] = useState(false)
+
+    const getToken = async () => {
+        const token = localStorage.getItem("access")
+        if (!token) {
+            alert("You need to be logged in to use this feature.")
+            router.push("/login")
+            return null
+        }
+        return token
+    }
+
+    const handleNotifyMe = async () => {
+        setNotifyLoading(true)
+        setMessage("")
+        setError("")
+        const base_url = process.env.NEXT_PUBLIC_API_URL || ""
+        try {
+            const token = await getToken()
+            const res = await fetch(`${base_url}/api/accounts/notify-me/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+            })
+
+            const data = await res.json()
+            if (data?.status === "success") {
+                setMessage(data?.message || "You will be notified when the page is live!")
+                setNotifyLoading(false)
+            } else if (data?.status === "error") {
+                setError(data?.message || "An error occurred. Please try again later.")
+                setNotifyLoading(false)
+            } else {
+                setError(data?.detail || "An unexpected error occurred. Please try again later.")
+                setNotifyLoading(false)
+            }
+        } catch (e) {
+            const errorMessage = e instanceof Error ? e.message : typeof e === 'object' && e !== null && 'details' in e ? (e as any).details : "An unexpected error occurred. Please try again later."
+            setError(errorMessage)
+            setNotifyLoading(false)
+        }
+    }
+
     return (
         <main className="min-h-screen bg-white relative overflow-hidden">
             {/* Grid background */}
@@ -33,6 +83,16 @@ export default function UnderDevelopment() {
                     />
                 ))}
             </div>
+            {message && (
+                <div className="absolute rounded-xl  top-10 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 border-slate-300 shadow">
+                    {message}
+                </div>
+            )}
+            {error && (
+                <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-red-100 text-red-800 px-4 py-2 rounded shadow">
+                    {error}
+                </div>
+            )}
             {/* Main Content */}
             <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-8 pt-20">
                 <div className="text-center max-w-2xl mx-auto">
@@ -137,8 +197,8 @@ export default function UnderDevelopment() {
                             Back to Home
                             <ArrowRight size={18} className="group-hover:translate-x-1 transition" />
                         </Link>
-                        <button className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-gray-300 text-gray-700 rounded-lg hover:border-blue-600 hover:text-blue-600 transition font-medium text-sm sm:text-base">
-                            Notify Me
+                        <button onClick={handleNotifyMe} disabled={notifyLoading} className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 border border-gray-300 text-gray-700 rounded-lg hover:border-blue-600 hover:text-blue-600 transition font-medium text-sm sm:text-base">
+                            {notifyLoading ? "Loading..." : "Notify Me"}
                         </button>
                     </div>
 
