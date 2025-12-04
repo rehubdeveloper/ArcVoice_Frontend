@@ -59,7 +59,7 @@ export default function UnderDevelopment() {
                 setNotifyLoading(false)
             }
         } catch (e) {
-            const errorMessage = e instanceof Error ? e.message : typeof e === 'object' && e !== null && 'details' in e ? (e as any).details : "An unexpected error occurred. Please try again later."
+            const errorMessage = e instanceof Error ? e.message : typeof e === 'object' && e !== null && 'details' in e ? String((e as any).details) : "An unexpected error occurred. Please try again later."
             if (errorTimeout) clearTimeout(errorTimeout)
             setError(errorMessage)
             const id = setTimeout(() => setError(""), 5000) as unknown as number
@@ -98,7 +98,7 @@ export default function UnderDevelopment() {
                 ))}
             </div>
             {message && (
-                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow flex items-center">
+                <div className="absolute top-20 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow flex items-center z-50">
                     <span>{message}</span>
                     <button onClick={() => { setMessage(""); if (messageTimeout) clearTimeout(messageTimeout); setMessageTimeout(null); }} className="ml-2 text-green-800 hover:text-green-900">
                         <X size={16} />
@@ -106,7 +106,7 @@ export default function UnderDevelopment() {
                 </div>
             )}
             {error && (
-                <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-red-100 text-red-800 px-4 py-2 rounded shadow flex items-center">
+                <div className="absolute top-28 left-1/2 transform -translate-x-1/2 bg-red-100 text-red-800 px-4 py-2 rounded shadow flex items-center z-50">
                     <span>{error}</span>
                     <button onClick={() => { setError(""); if (errorTimeout) clearTimeout(errorTimeout); setErrorTimeout(null); }} className="ml-2 text-red-800 hover:text-red-900">
                         <X size={16} />
