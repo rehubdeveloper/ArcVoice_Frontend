@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
+import { Checkbox } from "@/components/ui/checkbox";
 import GoogleLoginButton from "./google-login-button";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -20,6 +21,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
   const [successMessage, setSuccessMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{ [key: string]: string }>({});
   const [resendCountdown, setResendCountdown] = useState(0);
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -36,6 +38,12 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
     setLoading(true);
     setSuccessMessage("");
     setFieldErrors({});
+
+    if (!acceptTerms) {
+      setFieldErrors({ terms: "You must accept the Terms & Conditions to continue" });
+      setLoading(false);
+      return;
+    }
 
     const username = e.target.name.value;
     const email = e.target.email.value;
@@ -136,7 +144,39 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
         </Field>
 
         <Field>
-          <Button type="submit" disabled={loading}>
+          <div className="flex items-start space-x-3">
+            <Checkbox
+              id="terms"
+              checked={acceptTerms}
+              onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
+              required
+            />
+            <div className="grid gap-1.5 leading-none">
+              <label
+                htmlFor="terms"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                I agree to the{" "}
+                <a
+                  href="/terms-and-conditions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  Terms & Conditions
+                </a>
+              </label>
+              {fieldErrors.terms && (
+                <div className="text-red-600 text-sm">
+                  {fieldErrors.terms}
+                </div>
+              )}
+            </div>
+          </div>
+        </Field>
+
+        <Field>
+          <Button type="submit" disabled={loading || !acceptTerms}>
             {loading ? "Creating account..." : "Create Account"}
           </Button>
         </Field>

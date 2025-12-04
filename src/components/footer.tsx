@@ -81,22 +81,22 @@ export default function Footer() {
             <h4 className="font-semibold text-gray-900 mb-4">Product</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-blue-600 transition">
+                <Link href="/under-development" className="text-sm text-gray-600 hover:text-blue-600 transition">
                   Features
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-blue-600 transition">
+                <Link href="/under-development" className="text-sm text-gray-600 hover:text-blue-600 transition">
                   Pricing
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-blue-600 transition">
+                <Link href="/under-development" className="text-sm text-gray-600 hover:text-blue-600 transition">
                   Security
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-blue-600 transition">
+                <Link href="/under-development" className="text-sm text-gray-600 hover:text-blue-600 transition">
                   Roadmap
                 </Link>
               </li>
@@ -108,22 +108,22 @@ export default function Footer() {
             <h4 className="font-semibold text-gray-900 mb-4">Resources</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-blue-600 transition">
+                <Link href="/under-development" className="text-sm text-gray-600 hover:text-blue-600 transition">
                   Documentation
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-blue-600 transition">
+                <Link href="/under-development" className="text-sm text-gray-600 hover:text-blue-600 transition">
                   API Docs
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-blue-600 transition">
+                <Link href="/under-development" className="text-sm text-gray-600 hover:text-blue-600 transition">
                   Blog
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-blue-600 transition">
+                <Link href="/under-development" className="text-sm text-gray-600 hover:text-blue-600 transition">
                   Status
                 </Link>
               </li>
@@ -135,22 +135,22 @@ export default function Footer() {
             <h4 className="font-semibold text-gray-900 mb-4">Company</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-blue-600 transition">
+                <Link href="/under-development" className="text-sm text-gray-600 hover:text-blue-600 transition">
                   About
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-blue-600 transition">
+                <Link href="/under-development" className="text-sm text-gray-600 hover:text-blue-600 transition">
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-blue-600 transition">
+                <Link href="/privacy" className="text-sm text-gray-600 hover:text-blue-600 transition">
                   Privacy
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-sm text-gray-600 hover:text-blue-600 transition">
+                <Link href="/terms-and-conditions" className="text-sm text-gray-600 hover:text-blue-600 transition">
                   Terms
                 </Link>
               </li>
