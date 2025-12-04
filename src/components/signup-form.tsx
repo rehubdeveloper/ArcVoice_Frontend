@@ -60,7 +60,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
     if (!res.ok) {
       // Handle non-200 responses
       const data = await res.json();
-      setFieldErrors({ general: data.email || data.username || "Signup failed" });
+      setFieldErrors({ general: String(data.email || data.username || "Signup failed") });
       setLoading(false);
       return;
     }

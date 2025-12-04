@@ -79,7 +79,7 @@ export function OTPForm({ ...props }: React.ComponentProps<typeof Card>) {
           router.push("/login")
         }, 2000)
       } else {
-        setErrorMessage(data.message || "Invalid OTP code")
+        setErrorMessage(String(data.message || "Invalid OTP code"))
       }
     } catch (error) {
       setErrorMessage("An error occurred. Please try again.")
@@ -109,7 +109,7 @@ export function OTPForm({ ...props }: React.ComponentProps<typeof Card>) {
         setSuccessMessage(data.message || "OTP code sent again!")
         setResendCountdown(30) // 30 second countdown
       } else {
-        setErrorMessage(data.message || "Failed to resend OTP")
+        setErrorMessage(String(data.message || "Failed to resend OTP"))
       }
     } catch (error) {
       setErrorMessage("An error occurred. Please try again.")
