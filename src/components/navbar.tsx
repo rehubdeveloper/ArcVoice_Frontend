@@ -19,6 +19,14 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Normal Navbar */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full ${isScrolled ? "opacity-0 pointer-events-none" : "opacity-100"

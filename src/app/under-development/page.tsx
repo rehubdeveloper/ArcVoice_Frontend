@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, X } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -10,6 +10,8 @@ export default function UnderDevelopment() {
     const [error, setError] = useState("")
     const router = useRouter()
     const [notifyLoading, setNotifyLoading] = useState(false)
+    const [messageTimeout, setMessageTimeout] = useState<number | null>(null)
+    const [errorTimeout, setErrorTimeout] = useState<number | null>(null)
 
     const getToken = async () => {
         const token = localStorage.getItem("access")
@@ -38,18 +40,30 @@ export default function UnderDevelopment() {
 
             const data = await res.json()
             if (data?.status === "success") {
+                if (messageTimeout) clearTimeout(messageTimeout)
                 setMessage(data?.message || "You will be notified when the page is live!")
+                const id = setTimeout(() => setMessage(""), 5000) as unknown as number
+                setMessageTimeout(id)
                 setNotifyLoading(false)
             } else if (data?.status === "error") {
+                if (errorTimeout) clearTimeout(errorTimeout)
                 setError(data?.message || "An error occurred. Please try again later.")
+                const id = setTimeout(() => setError(""), 5000) as unknown as number
+                setErrorTimeout(id)
                 setNotifyLoading(false)
             } else {
+                if (errorTimeout) clearTimeout(errorTimeout)
                 setError(data?.detail || "An unexpected error occurred. Please try again later.")
+                const id = setTimeout(() => setError(""), 5000) as unknown as number
+                setErrorTimeout(id)
                 setNotifyLoading(false)
             }
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : typeof e === 'object' && e !== null && 'details' in e ? (e as any).details : "An unexpected error occurred. Please try again later."
+            if (errorTimeout) clearTimeout(errorTimeout)
             setError(errorMessage)
+            const id = setTimeout(() => setError(""), 5000) as unknown as number
+            setErrorTimeout(id)
             setNotifyLoading(false)
         }
     }
@@ -84,13 +98,19 @@ export default function UnderDevelopment() {
                 ))}
             </div>
             {message && (
-                <div className="absolute rounded-xl  top-10 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 border-slate-300 shadow">
-                    {message}
+                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-green-100 text-green-800 px-4 py-2 rounded shadow flex items-center">
+                    <span>{message}</span>
+                    <button onClick={() => { setMessage(""); if (messageTimeout) clearTimeout(messageTimeout); setMessageTimeout(null); }} className="ml-2 text-green-800 hover:text-green-900">
+                        <X size={16} />
+                    </button>
                 </div>
             )}
             {error && (
-                <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-red-100 text-red-800 px-4 py-2 rounded shadow">
-                    {error}
+                <div className="absolute top-16 left-1/2 transform -translate-x-1/2 bg-red-100 text-red-800 px-4 py-2 rounded shadow flex items-center">
+                    <span>{error}</span>
+                    <button onClick={() => { setError(""); if (errorTimeout) clearTimeout(errorTimeout); setErrorTimeout(null); }} className="ml-2 text-red-800 hover:text-red-900">
+                        <X size={16} />
+                    </button>
                 </div>
             )}
             {/* Main Content */}
