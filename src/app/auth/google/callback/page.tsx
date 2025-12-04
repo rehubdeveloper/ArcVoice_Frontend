@@ -60,7 +60,7 @@ export default function GoogleCallbackPage() {
         setStatusType("success")
 
         setTimeout(() => {
-          router.push("/")
+          router.push("/under-development")
         }, 2000)
       } catch (err) {
         console.error("Fatal callback handler error:", err)

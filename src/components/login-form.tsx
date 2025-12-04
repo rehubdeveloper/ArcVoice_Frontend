@@ -52,7 +52,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"div">) 
       }
 
       // Redirect to profile page to confirm login
-      router.push("/profile");
+      router.push("/under-development");
       return;
     }
 
