@@ -170,14 +170,14 @@ export default function Footer() {
                 className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition"
               >
                 <Mail className="w-4 h-4 flex-shrink-0" />
-                hello@arcvoice.com
+                tech@rehubdevelopers.com
               </a>
               <a
                 href="tel:+1-800-ARC-VOICE"
                 className="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition"
               >
                 <Phone className="w-4 h-4 flex-shrink-0" />
-                +1 (800) 272-8642
+                +234 810 722 4097
               </a>
             </div>
           </div>

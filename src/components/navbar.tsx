@@ -25,20 +25,20 @@ export default function Navbar() {
           }`}
       >
         <div className="px-4 sm:px-6 py-4 flex items-center justify-between max-w-full">
-          <div className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex-shrink-0"></div>
             <span className="text-lg sm:text-xl font-bold text-gray-900 truncate">Arc Voice</span>
-          </div>
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden lg:flex items-center gap-6 xl:gap-8">
-            <Link href="#" className="text-sm text-gray-700 hover:text-blue-600 transition whitespace-nowrap">
+            <Link href="/" className="text-sm text-gray-700 hover:text-blue-600 transition whitespace-nowrap">
               Home
             </Link>
-            <Link href="#features" className="text-sm text-gray-700 hover:text-blue-600 transition whitespace-nowrap">
+            <Link href="/under-development" className="text-sm text-gray-700 hover:text-blue-600 transition whitespace-nowrap">
               Features
             </Link>
-            <Link href="#" className="text-sm text-gray-700 hover:text-blue-600 transition whitespace-nowrap">
+            <Link href="/under-development" className="text-sm text-gray-700 hover:text-blue-600 transition whitespace-nowrap">
               Docs
             </Link>
           </div>
@@ -64,13 +64,13 @@ export default function Navbar() {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="lg:hidden bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex flex-col gap-3">
-            <Link href="#" className="text-sm text-gray-700 hover:text-blue-600 transition">
+            <Link href="/" className="text-sm text-gray-700 hover:text-blue-600 transition">
               Home
             </Link>
-            <Link href="#features" className="text-sm text-gray-700 hover:text-blue-600 transition">
+            <Link href="/under-development" className="text-sm text-gray-700 hover:text-blue-600 transition">
               Features
             </Link>
-            <Link href="#" className="text-sm text-gray-700 hover:text-blue-600 transition">
+            <Link href="/under-development" className="text-sm text-gray-700 hover:text-blue-600 transition">
               Docs
             </Link>
             <div className="flex flex-col gap-2 pt-2">
@@ -98,19 +98,19 @@ export default function Navbar() {
           {/* Desktop Menu - Hidden on mobile */}
           <div className="hidden sm:flex items-center gap-4 lg:gap-6">
             <Link
-              href="#"
+              href="/"
               className="text-xs lg:text-sm text-gray-700 hover:text-blue-600 transition whitespace-nowrap"
             >
               Home
             </Link>
             <Link
-              href="#features"
+              href="/under-development"
               className="text-xs lg:text-sm text-gray-700 hover:text-blue-600 transition whitespace-nowrap"
             >
               Features
             </Link>
             <Link
-              href="#"
+              href="/under-development"
               className="text-xs lg:text-sm text-gray-700 hover:text-blue-600 transition whitespace-nowrap"
             >
               Docs
@@ -138,13 +138,13 @@ export default function Navbar() {
         {/* Mobile Menu for scrolled navbar */}
         {isMobileMenuOpen && isScrolled && (
           <div className="sm:hidden bg-white/95 backdrop-blur-xl border border-white/20 rounded-2xl mt-2 mx-4 px-4 py-4 flex flex-col gap-3 shadow-lg">
-            <Link href="#" className="text-sm text-gray-700 hover:text-blue-600 transition">
+            <Link href="/" className="text-sm text-gray-700 hover:text-blue-600 transition">
               Home
             </Link>
-            <Link href="#features" className="text-sm text-gray-700 hover:text-blue-600 transition">
+            <Link href="/under-development" className="text-sm text-gray-700 hover:text-blue-600 transition">
               Features
             </Link>
-            <Link href="#" className="text-sm text-gray-700 hover:text-blue-600 transition">
+            <Link href="/under-development" className="text-sm text-gray-700 hover:text-blue-600 transition">
               Docs
             </Link>
             <div className="flex flex-col gap-2 pt-2 border-t border-gray-200">
