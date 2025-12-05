@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
+import Image from "next/image"
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -34,8 +35,8 @@ export default function Navbar() {
       >
         <div className="px-4 sm:px-6 py-4 flex items-center justify-between max-w-full">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex-shrink-0"></div>
-            <span className="text-lg sm:text-xl font-bold text-gray-900 truncate">Arc Voice</span>
+            <Image src="/arcvoice.png" alt="Arc Voice" width={32} height={32} />
+            <span className="text-lg hidden md:inline sm:text-xl font-bold bg-linear-to-r from-blue-500 to-teal-400 text-transparent bg-clip-text  truncate">ArcVoice</span>
           </Link>
 
           {/* Desktop Menu */}
@@ -98,10 +99,10 @@ export default function Navbar() {
           }`}
       >
         <div className="px-4 sm:px-6 py-2 sm:py-3 rounded-2xl sm:rounded-full bg-white/40 backdrop-blur-xl border border-white/20 shadow-lg flex items-center justify-between sm:gap-6 gap-3">
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="w-5 sm:w-6 h-5 sm:h-6 bg-blue-600 rounded-md flex-shrink-0"></div>
-            <span className="text-xs sm:text-sm font-bold text-gray-900 truncate">Arc Voice</span>
-          </div>
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/arcvoice.png" alt="Arc Voice" width={32} height={32} />
+            <span className="text-lg hidden md:inline sm:text-xl font-bold bg-linear-to-r from-blue-500 to-teal-400 text-transparent bg-clip-text  truncate">ArcVoice</span>
+          </Link>
 
           {/* Desktop Menu - Hidden on mobile */}
           <div className="hidden sm:flex items-center gap-4 lg:gap-6">

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { Mail, Phone } from "lucide-react"
+import Image from "next/image"
 
 export default function Footer() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -67,10 +68,10 @@ export default function Footer() {
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 mb-12 sm:mb-16">
           {/* Brand */}
           <div className="col-span-1 xs:col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg"></div>
-              <span className="text-xl font-bold text-gray-900">Arc Voice</span>
-            </div>
+            <Link href="/" className="flex items-center gap-2">
+              <Image src="/arcvoice.png" alt="Arc Voice" width={32} height={32} />
+              <span className="text-lg hidden md:inline sm:text-xl font-bold bg-linear-to-r from-blue-500 to-teal-400 text-transparent bg-clip-text  truncate">ArcVoice</span>
+            </Link>
             <p className="text-sm text-gray-600 leading-relaxed">
               Emotionally intelligent AI for human-like conversations at scale.
             </p>
