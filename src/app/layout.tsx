@@ -31,6 +31,23 @@ export const metadata: Metadata = {
     ],
     apple: "/apple-icon.png",
   },
+  openGraph: {
+    title: "Arc Voice - Emotionally Intelligent AI Assistant",
+    description:
+      "Human-like voice conversations for counseling, guidance, and automated workflows powered by advanced LLMs and voice technology.",
+    url: "https://arcvoice.rehubdevelopers.com/",
+    siteName: "Arc Voice",
+    images: [
+      {
+        url: "/arcvoice.png",
+        width: 1200,
+        height: 630,
+        alt: "Arc Voice Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
 }
 
 export default function RootLayout({
