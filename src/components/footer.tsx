@@ -180,6 +180,23 @@ export default function Footer() {
                 <Phone className="w-4 h-4 flex-shrink-0" />
                 +234 810 722 4097
               </a>
+              <p className="flex items-center gap-2">
+                Product of
+                <Link
+                  href="https://www.rehubdevelopers.com/"
+                  target="_blank"
+                  className="text-blue-600 hover:underline flex items-center gap-2"
+                >
+                  Rehub Developers
+                  <Image
+                    src="/rehubdevelopers.png"
+                    alt="Rehub Developers"
+                    width={20}
+                    height={20}
+                    className="inline-block"
+                  />
+                </Link>
+              </p>
             </div>
           </div>
         </div>
