@@ -34,65 +34,44 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"form">
   }, [resendCountdown])
 
   const handleSignup = async (e: any) => {
-    e.preventDefault();
-    setLoading(true);
-    setSuccessMessage("");
-    setFieldErrors({});
+  e.preventDefault();
+  setLoading(true);
+  setSuccessMessage("");
+  setFieldErrors({});
 
-    if (!acceptTerms) {
-      setFieldErrors({ terms: "You must accept the Terms & Conditions to continue" });
-      setLoading(false);
-      return;
-    }
+  if (!acceptTerms) {
+    setFieldErrors({ terms: "You must accept the Terms & Conditions to continue" });
+    setLoading(false);
+    return;
+  }
 
-    const username = e.target.name.value;
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-    console.log("SIGNUP DATA → ", { username, email, password });
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/accounts/register/`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
-      }
-    );
-    if (!res.ok) {
-      // Handle non-200 responses
-      const data = await res.json();
-      setFieldErrors({ general: String(data.email || data.username || "Signup failed") });
-      setLoading(false);
-      return;
-    }
+  const username = e.target.name.value;
+  const email = e.target.email.value;
+  const password = e.target.password.value;
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/accounts/register/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, email, password }),
+  });
+
+  if (!res.ok) {
     const data = await res.json();
-    console.log("SIGNUP RESPONSE → ");
+    setFieldErrors({ general: String(data.email || data.username || "Signup failed") });
+    setLoading(false);
+    return;
+  }
 
+  const data = await res.json();
+  setSuccessMessage("Registration successful! Redirecting to OTP verification...");
+  
+  // Redirect to OTP page immediately
+  setTimeout(() => {
+    router.push(`/otp?email=${encodeURIComponent(email)}`);
+    setLoading(false);
+  }, 1000);
+};
 
-    // Send OTP immediately after successful registration
-    const otpRes = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/accounts/auth/resend-otp/`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      }
-    );
-
-    const otpData = await otpRes.json();
-
-    if (!otpRes.ok || otpData.status !== "success") {
-      setFieldErrors({ general: otpData.message || "Failed to send OTP" });
-      setLoading(false);
-      return;
-    }
-
-    setSuccessMessage("OTP code has been sent to your mail! Redirecting...");
-    setResendCountdown(30); // Start countdown for resend restriction
-    setTimeout(() => {
-      router.push(`/otp?email=${encodeURIComponent(email)}`);
-      setLoading(false);
-    }, 2000);
-  };
 
   return (
     <form className={cn("flex flex-col gap-6", className)} {...props} onSubmit={handleSignup}>
