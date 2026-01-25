@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 
 export default function GoogleLoginButton({
@@ -9,44 +8,51 @@ export default function GoogleLoginButton({
 }: {
   mode: "login" | "signup";
 }) {
-
   const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+
   const handleGoogle = async () => {
     try {
-      // Use an explicit environment config if present, otherwise fall back to the
-      // existing client callback route under /auth/google/callback
-      // (the app has src/app/auth/google/callback/page.tsx) — ensure this value is
-      // registered in your Google Cloud Console "Authorized redirect URIs".
-      const redirectUri = `${window.location.origin}/auth/google/callback`
-      // Helpful debug info (only in dev) so you can quickly check what redirect
-      // URI was used if Google reports redirect_uri_mismatch in their error.
-      if (process.env.NODE_ENV === "development") {
-        console.debug("Using Google redirect_uri:", redirectUri);
-      }
-
-      // Build the Google OAuth 2.0 authorization URL client-side using
-      // NEXT_PUBLIC_GOOGLE_CLIENT_ID and the redirect URI used by the app.
-      // The backend /api/accounts/google/ endpoint expects the `code` (not the
-      // auth URL), which will be handled in the callback page.
-
       if (!clientId) {
         console.error("Missing NEXT_PUBLIC_GOOGLE_CLIENT_ID environment variable");
         return;
       }
 
+      // Must match one of your Google Cloud Console "Authorized redirect URIs"
+      const redirectUri = `${window.location.origin}/auth/google/callback`;
+
+      if (process.env.NODE_ENV === "development") {
+        console.debug("Using Google redirect_uri:", redirectUri);
+      }
+
+      // ✅ Add Gmail scopes now (space-separated)
+      const scopes = [
+        "openid",
+        "email",
+        "profile",
+        "https://www.googleapis.com/auth/gmail.readonly",
+        "https://www.googleapis.com/auth/gmail.send",
+        "https://www.googleapis.com/auth/gmail.modify",
+      ].join(" ");
+
       const params = new URLSearchParams({
         client_id: clientId,
         redirect_uri: redirectUri,
         response_type: "code",
-        scope: "openid email profile",
+        scope: scopes,
+
+        // ✅ required to get refresh_token (when Google will issue it)
         access_type: "offline",
+
+        // ✅ recommended: reuse existing grants, reduces repeated prompts
         include_granted_scopes: "true",
+
+        // ✅ force consent at least once to ensure refresh_token comes back
+        // You can later switch to "select_account" after you confirm refresh_token is stored.
         prompt: "consent",
       });
 
       const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
       window.location.href = googleAuthUrl;
-
     } catch (error) {
       console.error("Google login failed:", error);
     }
@@ -59,4 +65,3 @@ export default function GoogleLoginButton({
     </Button>
   );
 }
-
